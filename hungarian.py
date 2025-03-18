@@ -1,43 +1,65 @@
 import numpy as np
-import networkx as nx
-from scipy.optimize import linear_sum_assignment
 
 # Cost matrix
 cost_matrix = np.array([
-    [0, 1],
-    [1, 0],
-    
+    [0, 1, 3, 2, 4],
+    [0, 1, 4, 3, 2],
+    [1, 2, 4, 0, 3],
+    [3, 0, 2, 4, 1],
+    [3, 4, 2, 1, 0]
 ])
 
-num_tasks, num_workers = cost_matrix.shape  # Should be square for bipartite matching
+n = cost_matrix.shape[0]  # Number of tasks/workers (assumes a square matrix)
 
-# Step 1: Solve using SciPy (Hungarian Algorithm)
-row_ind, col_ind = linear_sum_assignment(cost_matrix)
-optimal_cost = cost_matrix[row_ind, col_ind].sum()
+# DP table (Initialize all values with infinity)
+INF = float('inf')
+dp = [INF] * (1 << n)  # There are 2^n states
+dp[0] = 0  # Base case: No tasks assigned → cost is 0
 
-# Step 2: Create a bipartite graph
-B = nx.Graph()
+# Parent tracking for backtracking multiple solutions
+parent = {mask: [] for mask in range(1 << n)}  # Dictionary to store multiple parents
 
-tasks = range(num_tasks)                      # Task nodes: 0 to num_tasks-1
-workers = range(num_tasks, num_tasks + num_workers)  # Worker nodes: num_tasks to num_tasks + num_workers - 1
+# DP Transition
+for mask in range(1 << n):  # Iterate through all possible worker assignments
+    i = bin(mask).count('1')  # Number of tasks assigned so far
+    if i >= n:  # If all tasks are assigned, skip
+        continue
 
-# Add weighted edges between tasks and workers
-for i in tasks:
-    for j in range(num_workers):
-        B.add_edge(i, num_tasks + j, weight=cost_matrix[i, j])
+    for j in range(n):  # Try assigning worker j
+        if not (mask & (1 << j)):  # If worker j is not assigned
+            new_mask = mask | (1 << j)  # Assign worker j
+            new_cost = dp[mask] + cost_matrix[i][j]
 
-# Step 3: Find the minimum-weight perfect matching
-matching = nx.algorithms.matching.min_weight_matching(B, weight="weight")
+            if new_cost < dp[new_mask]:  # Found a better cost
+                dp[new_mask] = new_cost
+                parent[new_mask] = [(mask, j)]  # Replace with new optimal parent
 
-# Step 4: Compute total cost of this matching
-valid_matching = [(i, j) for i, j in matching if i in tasks and j in workers]
-matching_cost = sum(cost_matrix[i, j - num_tasks] for i, j in valid_matching)
+            elif new_cost == dp[new_mask]:  # Another way to achieve the same optimal cost
+                parent[new_mask].append((mask, j))  # Store multiple optimal parents
 
-# Step 5: Check for multiple solutions
-has_multiple_solutions = (matching_cost == optimal_cost) and (len(valid_matching) > 1)
+# Optimal cost from DP table
+optimal_cost = dp[(1 << n) - 1]  # Full assignment mask (all tasks assigned)
+
+# Function to reconstruct all assignments
+def backtrack(mask):
+    if mask == 0:
+        return [[]]  # Base case: No assignments made yet
+
+    assignments = []
+    for prev_mask, j in parent[mask]:  # Explore all valid previous states
+        prev_assignments = backtrack(prev_mask)  # Recursively backtrack
+        i = bin(prev_mask).count('1')  # Get the task number from previous mask
+
+        for assign in prev_assignments:
+            assignments.append(assign + [(i, j)])
+
+    return assignments
+
+# Find all optimal assignments
+all_optimal_assignments = backtrack((1 << n) - 1)
 
 # Output results
 print("Optimal Cost:", optimal_cost)
-print("Initial SciPy Assignment:", list(zip(row_ind, col_ind)))
-print("NetworkX Matching:", valid_matching)
-print("Are there multiple solutions?", has_multiple_solutions)
+print("All Optimal Assignments:")
+for assignment in all_optimal_assignments:
+    print(assignment)
