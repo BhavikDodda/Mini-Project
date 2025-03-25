@@ -12,7 +12,14 @@ def randomprefgen():
 # person, allotment preference
 print("person, allotment pref")
 #prefList=[(people[i],randomprefgen()) for i in range(N)]
-prefList=[(0, [0, 1, 3, 2, 4]), (1, [2, 0, 3, 4, 1]), (2, [2, 1, 0, 4, 3]), (3, [1, 3, 2, 0, 4]), (4, [1, 0, 3, 2, 4])]
+#prefList=[(0, [0, 1, 3, 2, 4]), (1, [2, 0, 3, 4, 1]), (2, [2, 1, 0, 4, 3]), (3, [1, 3, 2, 0, 4]), (4, [1, 0, 3, 2, 4])]
+prefList = [
+    (0,[0, 1, 3, 2, 4]),  # Person 1's preference order
+    (1,[0, 1, 3, 4, 2]),  # Person 2's preference order
+    (2,[3, 0, 1, 4, 2]),  # Person 3's preference order
+    (3,[1, 4, 2, 0, 3]),  # Person 4's preference order
+    (4,[4, 3, 2, 0, 1])   # Person 5's preference order
+]
 print(prefList)
 
 # random allotment (room,person)
@@ -36,8 +43,8 @@ def generate_permutations(n):
     return permutations
 
 AllPerms=generate_permutations(N)
-bestAllot={rooms[i]:(AllPerms[0])[i] for i in range(N)}
-bestCost=cost(bestAllot,prefList)
+bestAllot=[{rooms[i]:(AllPerms[0])[i] for i in range(N)}]
+bestCost=cost(bestAllot[0],prefList)
 for ii in AllPerms:
     allot={rooms[i]:ii[i] for i in range(N)}
     newcost=cost(allot,prefList)
@@ -46,7 +53,9 @@ for ii in AllPerms:
 
     if(newcost<bestCost):
         bestCost=newcost
-        bestAllot=allot
+        bestAllot=[allot]
+    if(newcost==bestCost):
+        bestAllot.append(allot)
 
 print("#######\nMinima: ")
 print(bestAllot)
