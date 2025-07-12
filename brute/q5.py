@@ -24,8 +24,6 @@ allot={0: 1, 1: 0, 2: 3, 3: 2, 4: 4}
 #print(allot)
         
 def cost(allot0,pref0):
-    print(allot0)
-    print(pref0)
     score=0
     for room in allot0:
         person=allot0[room]
@@ -34,7 +32,6 @@ def cost(allot0,pref0):
 
 def deviation(allot0,pref0):
     avg=cost(allot0,pref0)/N
-    print(avg)
     dev=0
     for room in allot0:
         person=allot0[room]
@@ -49,17 +46,20 @@ def generate_permutations(n):
 
 AllPerms=generate_permutations(N)
 bestAllot={rooms[i]:(AllPerms[0])[i] for i in range(N)}
-print(bestAllot)
+#print(bestAllot)
 bestDev=deviation(bestAllot,prefList)
 
 for i in range(N):
     possible=set([item[1][i] for item in prefList])
-    print(possible)
+    print("possible",possible)
     if(len(possible)==N):
         print(i)
-        bestAllot={prefList[j][1][i]:prefList[j][0] for j in range(N)}
+        newAllot={prefList[j][1][i]:prefList[j][0] for j in range(N)}
         print(bestAllot)
-        bestDev=deviation(bestAllot,prefList)
+        newDev=deviation(newAllot,prefList)
+        if newDev<bestDev:
+            bestDev=newDev
+            bestAllot=newAllot
 
 print("#######\nMinima: ")
 print(bestAllot)

@@ -13,12 +13,19 @@ def randomprefgen():
 print("person, allotment pref")
 #prefList=[(people[i],randomprefgen()) for i in range(N)]
 #prefList=[(0, [0, 1, 3, 2, 4]), (1, [2, 0, 3, 4, 1]), (2, [2, 1, 0, 4, 3]), (3, [1, 3, 2, 0, 4]), (4, [1, 0, 3, 2, 4])]
-prefList = [
-    (0,[0, 1, 3, 2, 4]),  # Person 1's preference order
-    (1,[0, 1, 3, 4, 2]),  # Person 2's preference order
-    (2,[3, 0, 1, 4, 2]),  # Person 3's preference order
-    (3,[1, 4, 2, 0, 3]),  # Person 4's preference order
-    (4,[4, 3, 2, 0, 1])   # Person 5's preference order
+""" prefList = [
+    (0, [4,1,2,0,3]),  # Person 1's preference order
+    (1,[1,3,0,4,2]),  # Person 2's preference order
+    (2,[1,0,4,2,3]),  # Person 3's preference order
+    (3,[3,1,2,0,4]),  # Person 4's preference order
+    (4,[1,0,2,3,4])   # Person 5's preference order
+] """
+prefList=[
+    (0, [0,2,1,3,4]),  # Person 1's preference order
+    (1,[4,3,0,1,2]),  # Person 2's preference order
+    (2,[2,1,4,0,3]),  # Person 3's preference order
+    (3,[1,4,3,2,0]),  # Person 4's preference order
+    (4,[1,2,4,3,0])   # Person 5's preference order
 ]
 print(prefList)
 
@@ -55,7 +62,8 @@ for ii in AllPerms:
         bestCost=newcost
         bestAllot=[allot]
     if(newcost==bestCost):
-        bestAllot.append(allot)
+        if(allot not in bestAllot):
+            bestAllot.append(allot)
 
 print("#######\nMinima: ")
 print(bestAllot)
