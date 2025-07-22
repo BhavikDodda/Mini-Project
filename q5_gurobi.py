@@ -35,3 +35,5 @@ for i in range(n):
         if x[i,j].X > 0.5:
             print(f"Person {i} → Room {j} (Rank = {rank_matrix[i][j]})")
 print(f"Variance = {model.ObjVal}")
+
+print(f"MIP Gap: {model.MIPGap}")
