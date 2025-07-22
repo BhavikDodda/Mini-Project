@@ -1,0 +1,57 @@
+import numpy as np
+from scipy.optimize import linear_sum_assignment
+lambda_value=input("enter the value of lambda: ")
+lambda_value=float(lambda_value)
+def fairness_modified_hungarian(preference_lists, lambda_value):
+    N = len(preference_lists)
+
+    # Step 1: Build Original Cost Matrix
+    cost_matrix = np.zeros((N, N), dtype=int)
+    for i in range(N):
+        ranks = {room: idx for idx, room in enumerate(preference_lists[i])}
+        for j in range(N):
+            cost_matrix[i][j] = ranks[j]
+
+    print("Original Cost Matrix:")
+    print(cost_matrix)
+
+    # Step 2: Create Modified Cost Matrix (same as before)
+    modified_matrix = np.zeros_like(cost_matrix, dtype=float)
+    for i in range(N):
+        row = cost_matrix[i]
+        mean = np.mean(row)
+        for j in range(N):
+            penalty = abs(row[j] - mean)
+            modified_matrix[i][j] = row[j] + lambda_value * penalty
+
+    print(f"\n Modified Cost Matrix (λ = {lambda_value}):")
+    print(modified_matrix)
+
+    # Step 3: Solve with Hungarian Algorithm
+    row_ind, col_ind = linear_sum_assignment(modified_matrix)
+
+    # Step 4: Compute Metrics
+    allocation = list(zip(row_ind, col_ind))
+    individual_costs = [cost_matrix[i][j] for i, j in allocation]
+    total_cost = sum(individual_costs)
+    mean_cost = np.mean(individual_costs)
+    variance = np.mean([(c - mean_cost) ** 2 for c in individual_costs])
+    score = total_cost + lambda_value * variance
+
+    print("\nFinal Allocation:")
+    for i, j in allocation:
+        print(f"  Person {i} → Room {j} (Cost: {cost_matrix[i][j]})")
+
+    print(f"\nTotal Cost: {total_cost}")
+    print(f"Variance: {variance:.2f}")
+    print(f"Final Score: {score:.2f} (Total + λ × Variance)")
+
+#Example
+prefs = [
+    [0, 1, 2, 3],
+    [1, 2, 0, 3],
+    [2, 0, 3, 1],
+    [1, 0, 2, 3],
+]
+
+fairness_modified_hungarian(prefs, lambda_value)

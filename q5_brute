@@ -1,0 +1,56 @@
+import numpy as np
+from itertools import permutations
+lamda_value=input("enter lambda: ")
+lamda_value=float(lamda_value)
+def evaluate_all_allocations(preference_lists):
+    N = len(preference_lists)
+
+    # Step 1: Build Cost Matrix
+    cost_matrix = np.zeros((N, N), dtype=int)
+    for i in range(N):
+        ranks = {room: idx for idx, room in enumerate(preference_lists[i])}
+        for j in range(N):
+            cost_matrix[i][j] = ranks[j]
+
+    print("Cost Matrix:")
+    print(cost_matrix)
+
+    best_total_cost = float('inf')
+    best_variance = float('inf')
+    best_allocs = []
+
+    print("\nAll Possible Allocations:")
+    for alloc in permutations(range(N)):
+        individual_costs = [cost_matrix[i][alloc[i]] for i in range(N)]
+        total_cost = sum(individual_costs)
+        
+        mean_cost = total_cost / N
+        squared_diffs = [(c - mean_cost) ** 2 for c in individual_costs]
+        variance = sum(squared_diffs) / N  # variance formula
+        
+        score=total_cost + lamda_value*variance
+        alloc_str = ", ".join([f"{i}→{alloc[i]}" for i in range(N)])
+        print(f"  [{alloc_str}] ➜ Total Cost: {total_cost}, Variance: {variance:.2f}")
+
+        if total_cost < best_total_cost or (total_cost == best_total_cost and variance < best_variance):
+            best_total_cost = total_cost
+            best_variance = variance
+            best_allocs = [alloc]
+        elif total_cost == best_total_cost and variance == best_variance:
+            best_allocs.append(alloc)
+    
+    print("\nBest Allocation(s):")
+    for alloc in best_allocs:
+        alloc_str = ", ".join([f"{i}→{alloc[i]}" for i in range(N)])
+        print(f"  [{alloc_str}] ➜ Total Cost: {best_total_cost}, Variance: {best_variance:.2f}")
+
+# Sample preferences
+prefs = [
+    [0, 1, 2, 3],
+    [1, 2, 0, 3],
+    [2, 0, 3, 1],
+    [1, 0, 2, 3],
+]
+
+# Run
+evaluate_all_allocations(prefs)
