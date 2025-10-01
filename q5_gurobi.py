@@ -8,7 +8,7 @@ rank_matrix = [
     [1, 2, 3]
 ]
 n = len(rank_matrix)
-model = gp.Model("RoomAllocation")
+model = gp.Model("RoomAllocation0")
 # Variables
 x = {}
 for i in range(n):

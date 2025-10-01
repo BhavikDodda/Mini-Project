@@ -13,7 +13,8 @@ def randomprefgen():
 print("person, allotment pref")
 #prefList=[(people[i],randomprefgen()) for i in range(N)]
 #prefList=[(0, [0, 1, 3, 2, 4]), (1, [2, 0, 3, 4, 1]), (2, [2, 1, 0, 4, 3]), (3, [1, 3, 2, 0, 4]), (4, [1, 0, 3, 2, 4])]
-prefList=[(0, [0, 1, 3, 2, 4]), (1, [2, 0, 3, 4, 1]), (2, [3, 1, 0, 4, 2]), (3, [1, 3, 2, 0, 4]), (4, [4, 0, 3, 2, 1])]
+prefList=[(0, [0, 1, 3, 2, 4]), (1, [2, 0, 3, 4, 1]), (2, [2, 1, 0, 4, 3]), (3, [1, 3, 2, 0, 4]), (4, [1, 0, 3, 2, 4])]
+
 print(prefList)
 
 # random allotment (room,person)
