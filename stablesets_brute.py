@@ -1,4 +1,4 @@
-N=9
+
 
 import time
 import random
@@ -22,6 +22,7 @@ with open("prefList.pkl", "rb") as f:
     prefList = pickle.load(f)
 print(prefList)
 prefDict = dict(prefList)
+N=len(prefList)
 
 prefList_copy = copy.deepcopy(prefList)
 # Top trading cycle
@@ -118,8 +119,8 @@ pareto_optimal=set()
 for roomList in generate_permutations(N):
     pareto_optimal.add(tuple(ttc(roomList)))
 
-print("Total pareto optimal solutions found:",len(pareto_optimal))
 print("pareto optimal list",list(pareto_optimal))
+print("Total pareto optimal solutions found:",len(pareto_optimal))
 
 end = time.time()
 print("Time taken:", end - start, "seconds")

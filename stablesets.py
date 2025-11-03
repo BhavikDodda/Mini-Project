@@ -1,5 +1,4 @@
-N=9
-
+PRINT_INFO=False
 
 import random
 import copy
@@ -23,6 +22,7 @@ with open("prefList.pkl", "rb") as f:
     prefList = pickle.load(f)
 print(prefList)
 prefDict = dict(prefList)
+N=len(prefList)
 
 prefList_copy = copy.deepcopy(prefList)
 # Top trading cycle
@@ -204,14 +204,15 @@ while scan:
 
         all_initials_sorted = sorted(all_initials)
         pareto_optimal_inv.append(all_initials_sorted)
-        print("New Pareto optimal found:",finalallot," from initial allotment ",rooms)
-        print("Total pareto optimal solutions found till now:",len(pareto_optimal),". Inverse contains: ",len(all_initials_sorted),"\n")
+        if PRINT_INFO: print("New Pareto optimal found:",finalallot," from initial allotment ",rooms)
+        if PRINT_INFO: print("Total pareto optimal solutions found till now:",len(pareto_optimal),". Inverse contains: ",len(all_initials_sorted),"\n")
         # remove all permutations giving same final allotment
         scan=scan.difference(set(all_initials_sorted))
     else:
-        print("Already found pareto optimal",finalallot," from initial allotment ",rooms)
+        if PRINT_INFO: print("Already found pareto optimal",finalallot," from initial allotment ",rooms)
 
 print("pareto optimal list",pareto_optimal)
+print("Total pareto optimal solutions found:",len(pareto_optimal))
 
 
 
