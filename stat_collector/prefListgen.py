@@ -1,5 +1,6 @@
 import random
 import pickle
+import os
 
 def generate_pref_list(N: int):
     prefList = []
@@ -13,7 +14,7 @@ if __name__ == "__main__":
     N = 9   # change this to whatever size you want
     prefList = generate_pref_list(N)
 
-    with open("prefList.pkl", "wb") as f:
+    with open(os.path.join(os.path.dirname(__file__), "prefList.pkl"), "wb") as f:
         pickle.dump(prefList, f)
 
     print(f"Preference list for N={N} saved to prefList.pkl")

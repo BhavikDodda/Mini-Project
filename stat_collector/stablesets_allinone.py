@@ -17,8 +17,8 @@ print("person, allotment pref")
 #prefList=[(people[i],randomprefgen()) for i in range(N)]
 prefList=[(1, [4,3,2,1,5]), (2, [3,4,1,2,5]), (3,[1,2,3,4,5]), (4, [1,5,3,2,4]), (5, [2,3,4,5,1])]
 import pickle
-
-with open("prefList.pkl", "rb") as f:
+import os
+with open(os.path.join(os.path.dirname(__file__), "prefList.pkl"), "rb") as f:
     prefList = pickle.load(f)
 print(prefList)
 prefDict = dict(prefList)
@@ -240,8 +240,8 @@ print("person, allotment pref")
 #prefList=[(people[i],randomprefgen()) for i in range(N)]
 prefList=[(1, [4,3,2,1,5]), (2, [3,4,1,2,5]), (3,[1,2,3,4,5]), (4, [1,5,3,2,4]), (5, [2,3,4,5,1])]
 import pickle
-
-with open("prefList.pkl", "rb") as f:
+import os
+with open(os.path.join(os.path.dirname(__file__), "prefList.pkl"), "rb") as f:
     prefList = pickle.load(f)
 print(prefList)
 prefDict = dict(prefList)
