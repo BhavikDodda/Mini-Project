@@ -213,7 +213,7 @@ while scan:
 
 print("pareto optimal list",pareto_optimal)
 print("Total pareto optimal solutions found:",len(pareto_optimal))
-
+pareto_optimal_first=copy.deepcopy(pareto_optimal)
 
 
 end = time.time()
@@ -350,4 +350,5 @@ print("Time taken:", end2 - start2, "seconds")
 
 
 from logStuff import log_stats
-log_stats("INVTTC vs BRUTE", prefList, len(pareto_optimal), start, end, start2, end2)
+log_stats("INVTTC vs BRUTE", prefList,pareto_optimal_first,pareto_optimal, start, end, start2, end2)
+#(method_name, prefList, num_pareto1, num_pareto2, start_time, end_time, start_time2, end_time2)
