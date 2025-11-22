@@ -211,13 +211,13 @@ while scan:
     else:
         if PRINT_INFO: print("Already found pareto optimal",finalallot," from initial allotment ",rooms)
 
-print("pareto optimal list",pareto_optimal)
-print("Total pareto optimal solutions found:",len(pareto_optimal))
+if PRINT_INFO: print("pareto optimal list",pareto_optimal)
+if PRINT_INFO: print("Total pareto optimal solutions found:",len(pareto_optimal))
 pareto_optimal_first=copy.deepcopy(pareto_optimal)
 
 
 end = time.time()
-print("Time taken:", end - start, "seconds")
+if PRINT_INFO: print("Time taken:", end - start, "seconds")
 
 ###################################
 
@@ -342,11 +342,11 @@ pareto_optimal=set()
 for roomList in generate_permutations(N):
     pareto_optimal.add(tuple(ttc(roomList)))
 
-print("pareto optimal list",list(pareto_optimal))
-print("Total pareto optimal solutions found:",len(pareto_optimal))
+if PRINT_INFO: print("pareto optimal list",list(pareto_optimal))
+if PRINT_INFO: print("Total pareto optimal solutions found:",len(pareto_optimal))
 
 end2 = time.time()
-print("Time taken:", end2 - start2, "seconds")
+if PRINT_INFO: print("Time taken:", end2 - start2, "seconds")
 
 
 from logStuff import log_stats
